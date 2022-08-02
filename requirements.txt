@@ -1,0 +1,2 @@
+python-dotenv==0.9.1
+urllib3==1.26.11
