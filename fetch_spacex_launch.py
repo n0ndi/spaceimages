@@ -1,12 +1,14 @@
 import argparse
+import os
 import requests
 
 
-def get_image(url, path):
-    response = requests.get(url)
+def get_image(url, path, params=None):
+    response = requests.get(url, params)
     response.raise_for_status()
     with open(path, 'wb') as file:
         file.write(response.content)
+
 
 def get_links(url):
     response = requests.get(url)
@@ -18,14 +20,21 @@ def fetch_spacex_last_launch():
     url = "https://api.spacexdata.com/v5/launches/latest"
     link_list = get_links(url)
     for number in range(len(link_list)):
-        get_image(link_list[number], f"images\spacex_{number}.jpeg")
+        get_image(
+            link_list[number],
+            os.path.join("images", f"spacex_{number}.jpeg.jpg")
+        )
 
 
-def  fetch_spacex_launch(id):
+def fetch_spacex_launch(id):
     url = f"https://api.spacexdata.com/v5/launches/{id}"
     link_list = get_links(url)
     for number in range(len(link_list)):
-        get_image(link_list[number], f"images\spacex_{number}.jpeg")
+        get_image(
+            link_list[number],
+            os.path.join("images", f"spacex_{number}.jpeg.jpg")
+        )
+
 
 def main():
     parser = argparse.ArgumentParser(description='Скачивает изображение запуска')
@@ -33,9 +42,8 @@ def main():
     launch_id = parser.parse_args()
     try:
         fetch_spacex_launch(launch_id.launch_id)
-    except:
+    except requests.exceptions.HTTPError:
         fetch_spacex_last_launch()
-
 
 
 if __name__ == "__main__":

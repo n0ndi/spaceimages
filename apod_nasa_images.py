@@ -1,6 +1,7 @@
 import requests
 import os
 from dotenv import load_dotenv
+from fetch_spacex_launch import get_image
 
 
 def get_apod_nasa(api):
@@ -12,11 +13,16 @@ def get_apod_nasa(api):
     response = requests.get(url, params)
     response.raise_for_status()
     for number in range(len(response.json())):
-        expansion = os.path.splitext(response.json()[number]["hdurl"])[1]
+        try:
+            expansion = os.path.splitext(response.json()[number]["hdurl"])[1]
+        except KeyError:
+            pass
         if expansion == ".jpg":
-            reply = requests.get(response.json()[number]["hdurl"])
-            with open(f"images\_nasa_apod_{number}.jpg", 'wb') as file:
-                file.write(reply.content)
+            get_image(
+                response.json()[number]["hdurl"],
+                os.path.join("images", f"_nasa_apod_{number}.jpg"),
+                params
+            )
         else:
             pass
 
