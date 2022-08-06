@@ -21,22 +21,22 @@ pip install -r requirements.txt
 
 ### Пример запуска скриптов
 ```
-C:\Users\Никита>apod_nasa_images.py
+apod_nasa_images.py
 ```
 ```
-C:\Users\Никита>epic_nasa_images.py
+epic_nasa_images.py
 ```
 ```
-C:\Users\Никита> fetch_spacex_launch.py
+fetch_spacex_launch.py
 ```
 ```
-C:\Users\Никита> fetch_spacex_launch.py --launch_id 5eb87d47ffd86e000604b38a
+fetch_spacex_launch.py --launch_id 5eb87d47ffd86e000604b38a
 ```
 ```
-C:\Users\Никита> tgbot.py
+tgbot.py
 ```
 ```
-C:\Users\Никита> tgbot.py --time 2
+tgbot.py --time 2
 ```
 
 ### Цель проекта
