@@ -1,13 +1,8 @@
 import argparse
 import os
+import dotenv
 import requests
-
-
-def get_image(url, path, params=None):
-    response = requests.get(url, params)
-    response.raise_for_status()
-    with open(path, 'wb') as file:
-        file.write(response.content)
+from get_image_func import get_image
 
 
 def get_links(url):
@@ -16,34 +11,27 @@ def get_links(url):
     return response.json()["links"]["flickr"]["original"]
 
 
-def fetch_spacex_last_launch():
-    url = "https://api.spacexdata.com/v5/launches/latest"
+def fetch_spacex_launchs(launch_id=None, path="images"):
+    if launch_id == None:
+        url = "https://api.spacexdata.com/v5/launches/latest"
+    else:
+        url = f"https://api.spacexdata.com/v5/launches/{launch_id}"
     link_list = get_links(url)
     for number in range(len(link_list)):
         get_image(
             link_list[number],
-            os.path.join("images", f"spacex_{number}.jpeg.jpg")
-        )
-
-
-def fetch_spacex_launch(id):
-    url = f"https://api.spacexdata.com/v5/launches/{id}"
-    link_list = get_links(url)
-    for number in range(len(link_list)):
-        get_image(
-            link_list[number],
-            os.path.join("images", f"spacex_{number}.jpeg.jpg")
+            os.path.join(path, f"spacex_{number}.jpg")
         )
 
 
 def main():
+    dotenv.load_dotenv()
+    images_path = os.getenv("IMAGES_PATH")
+    os.makedirs(images_path, exist_ok=True)
     parser = argparse.ArgumentParser(description='Скачивает изображение запуска')
     parser.add_argument('--launch_id', help="ID запуска")
     launch_id = parser.parse_args()
-    try:
-        fetch_spacex_launch(launch_id.launch_id)
-    except requests.exceptions.HTTPError:
-        fetch_spacex_last_launch()
+    fetch_spacex_launchs(launch_id.launch_id)
 
 
 if __name__ == "__main__":

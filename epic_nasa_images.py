@@ -1,10 +1,9 @@
 import requests
 import os
 from dotenv import load_dotenv
-from fetch_spacex_launch import get_image
+from get_image_func import get_image
 
-
-def get_epic_nasa(api):
+def get_epic_nasa(api, path="images"):
     url = f"https://api.nasa.gov/EPIC/api/natural"
     params = {
         "api_key": api
@@ -16,15 +15,17 @@ def get_epic_nasa(api):
         date = "/".join(date)
         get_image(
             f"https://api.nasa.gov/EPIC/archive/natural/{date}/jpg/{response.json()[number]['image']}.jpg",
-            os.path.join("images", f"_nasa_epic_{number}.jpg"),
+            os.path.join(path, f"_nasa_epic_{number}.jpg"),
             params
         )
 
 
 def main():
+    os.makedirs("images", exist_ok=True)
     load_dotenv()
     nasa_token = os.getenv("NASA_TOKEN")
-    get_epic_nasa(nasa_token)
+    images_path = os.getenv("IMAGES_PATH")
+    get_epic_nasa(nasa_token, images_path)
 
 
 if __name__ == "__main__":

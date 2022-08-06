@@ -10,14 +10,16 @@ from time import sleep
 def send_image(timer, api, id):
     files = os.listdir("images")
     bot = telegram.Bot(api)
-    random.shuffle(files)
-    for file in files:
-        with open(os.path.join("images", file), "rb") as photo:
-            bot.send_photo(id, photo=photo)
-            sleep(timer * 3600)
+    while True:
+        random.shuffle(files)
+        for file in files:
+            with open(os.path.join("images", file), "rb") as photo:
+                bot.send_photo(id, photo=photo)
+                sleep(timer * 3600)
 
 
 def main():
+    os.makedirs("images", exist_ok=True)
     load_dotenv()
     telegram_token = os.getenv("TELEGRAM_TOKEN")
     telegram_chat_id = os.getenv("TELEGRAM_CHAT_ID")
