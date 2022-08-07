@@ -1,7 +1,7 @@
 import requests
 import os
 from dotenv import load_dotenv
-from get_image_func import get_image
+from download_image_func import download_image
 
 
 def get_apod_nasa(api, path="images"):
@@ -12,29 +12,28 @@ def get_apod_nasa(api, path="images"):
     }
     response = requests.get(url, params)
     response.raise_for_status()
-    for number in range(len(response.json())):
+    images_json = response.json()
+    for number in range(len(images_json)):
         try:
-            expansion = os.path.splitext(response.json()[number]["hdurl"])[1]
+            expansion = os.path.splitext(images_json[number]["hdurl"])[1]
         except KeyError:
             pass
         if expansion == ".jpg":
             try:
-                get_image(
-                    response.json()[number]["hdurl"],
+                download_image(
+                    images_json[number]["hdurl"],
                     os.path.join(path, f"_nasa_apod_{number}.jpg"),
                     params
                 )
             except KeyError:
                 pass
-        else:
-            pass
 
 
 def main():
     os.makedirs("images", exist_ok=True)
     load_dotenv()
-    nasa_token = os.getenv("NASA_TOKEN")
-    images_path = os.getenv("IMAGES_PATH")
+    nasa_token = os.environ["NASA_TOKEN"]
+    images_path = os.getenv("IMAGES_PATH", default="images")
     get_apod_nasa(nasa_token)
 
 

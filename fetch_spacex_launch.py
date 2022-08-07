@@ -2,7 +2,7 @@ import argparse
 import os
 import dotenv
 import requests
-from get_image_func import get_image
+from download_image_func import download_image
 
 
 def get_links(url):
@@ -11,14 +11,11 @@ def get_links(url):
     return response.json()["links"]["flickr"]["original"]
 
 
-def fetch_spacex_launchs(launch_id=None, path="images"):
-    if launch_id == None:
-        url = "https://api.spacexdata.com/v5/launches/latest"
-    else:
-        url = f"https://api.spacexdata.com/v5/launches/{launch_id}"
+def fetch_spacex_launchs(launch_id="latest", path="images"):
+    url = f"https://api.spacexdata.com/v5/launches/{launch_id}"
     link_list = get_links(url)
     for number in range(len(link_list)):
-        get_image(
+        download_image(
             link_list[number],
             os.path.join(path, f"spacex_{number}.jpg")
         )
@@ -26,7 +23,7 @@ def fetch_spacex_launchs(launch_id=None, path="images"):
 
 def main():
     dotenv.load_dotenv()
-    images_path = os.getenv("IMAGES_PATH")
+    images_path = os.getenv("IMAGES_PATH", default="images")
     os.makedirs(images_path, exist_ok=True)
     parser = argparse.ArgumentParser(description='Скачивает изображение запуска')
     parser.add_argument('--launch_id', help="ID запуска")
