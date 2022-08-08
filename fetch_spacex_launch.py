@@ -11,12 +11,12 @@ def get_links(url):
     return response.json()["links"]["flickr"]["original"]
 
 
-def fetch_spacex_launchs(launch_id="latest", path="images"):
+def fetch_spacex_launch(launch_id, path):
     url = f"https://api.spacexdata.com/v5/launches/{launch_id}"
     link_list = get_links(url)
-    for number in range(len(link_list)):
+    for number, link in enumerate(link_list):
         download_image(
-            link_list[number],
+            link,
             os.path.join(path, f"spacex_{number}.jpg")
         )
 
@@ -26,9 +26,9 @@ def main():
     images_path = os.getenv("IMAGES_PATH", default="images")
     os.makedirs(images_path, exist_ok=True)
     parser = argparse.ArgumentParser(description='Скачивает изображение запуска')
-    parser.add_argument('--launch_id', help="ID запуска")
+    parser.add_argument('--launch_id', help="ID запуска", default="latest")
     launch_id = parser.parse_args()
-    fetch_spacex_launchs(launch_id.launch_id)
+    fetch_spacex_launch(launch_id.launch_id, images_path)
 
 
 if __name__ == "__main__":

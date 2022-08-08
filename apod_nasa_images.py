@@ -13,20 +13,20 @@ def get_apod_nasa(api, path="images"):
     response = requests.get(url, params)
     response.raise_for_status()
     images_json = response.json()
-    for number in range(len(images_json)):
+    for number, image in enumerate(images_json):
         try:
-            expansion = os.path.splitext(images_json[number]["hdurl"])[1]
+            extension = os.path.splitext(image["hdurl"])[1]
         except KeyError:
             pass
-        if expansion == ".jpg":
+        if extension == ".jpg":
             try:
                 download_image(
-                    images_json[number]["hdurl"],
+                    image["hdurl"],
                     os.path.join(path, f"_nasa_apod_{number}.jpg"),
                     params
                 )
             except KeyError:
-                pass
+                continue
 
 
 def main():
