@@ -7,19 +7,19 @@ from dotenv import load_dotenv
 from time import sleep
 
 
-def send_image(timer, api, telegram_id, path="images"):
+def send_image(time, api, telegram_id, path="images"):
     files = os.listdir(path)
     bot = telegram.Bot(api)
     while True:
+        random.shuffle(files)
         try:
-            random.shuffle(files)
             for file in files:
                 with open(os.path.join(path, file), "rb") as photo:
                     bot.send_photo(telegram_id, photo=photo)
-                    sleep(timer)
+                    sleep(time * 3600)
         except telegram.error.NetworkError:
             sleep(10)
-            send_image(timer, api, telegram_id,  path)
+            send_image(time, api, telegram_id,  path)
 
 
 def main():
