@@ -1,5 +1,8 @@
+import time
+
 import requests
 import os
+from datetime import datetime
 from dotenv import load_dotenv
 from download_image_func import download_image
 
@@ -11,9 +14,9 @@ def get_epic_nasa(api, path="images"):
     response = requests.get(url, params)
     response.raise_for_status()
     images_json = response.json()
-    for number in range(10):
-        date = (images_json[number]['date'].split()[0]).split("-")
-        date = "/".join(date)
+    for number, image in enumerate(images_json):
+        date = datetime.fromisoformat(image["date"])
+        date = '{:%Y/%m/%d}'.format(date)
         download_image(
             f"https://api.nasa.gov/EPIC/archive/natural/{date}/jpg/{images_json[number]['image']}.jpg",
             os.path.join(path, f"_nasa_epic_{number}.jpg"),
