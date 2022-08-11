@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from time import sleep
 
 
-def send_image(time, api, telegram_id, path="images"):
+def send_image(time, api, telegram_id, path):
     files = os.listdir(path)
     bot = telegram.Bot(api)
     while True:

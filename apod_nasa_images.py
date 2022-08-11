@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from download_image_func import download_image
 
 
-def get_apod_nasa(api, path="images"):
+def get_apod_nasa(api, path):
     url = "https://api.nasa.gov/planetary/apod"
     params = {
         "count": 40,
@@ -17,16 +17,13 @@ def get_apod_nasa(api, path="images"):
         try:
             extension = os.path.splitext(image["hdurl"])[1]
         except KeyError:
-            pass
+            continue
         if extension == ".jpg":
-            try:
                 download_image(
                     image["hdurl"],
                     os.path.join(path, f"_nasa_apod_{number}.jpg"),
                     params
                 )
-            except KeyError:
-                continue
 
 
 def main():
@@ -34,7 +31,7 @@ def main():
     load_dotenv()
     nasa_token = os.environ["NASA_TOKEN"]
     images_path = os.getenv("IMAGES_PATH", default="images")
-    get_apod_nasa(nasa_token)
+    get_apod_nasa(nasa_token, images_path)
 
 
 

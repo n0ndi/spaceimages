@@ -6,7 +6,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 from download_image_func import download_image
 
-def get_epic_nasa(api, path="images"):
+def get_epic_nasa(api, path):
     url = f"https://api.nasa.gov/EPIC/api/natural"
     params = {
         "api_key": api
@@ -18,7 +18,7 @@ def get_epic_nasa(api, path="images"):
         date = datetime.fromisoformat(image["date"])
         date = '{:%Y/%m/%d}'.format(date)
         download_image(
-            f"https://api.nasa.gov/EPIC/archive/natural/{date}/jpg/{images_json[number]['image']}.jpg",
+            f"https://api.nasa.gov/EPIC/archive/natural/{date}/jpg/{image['image']}.jpg",
             os.path.join(path, f"_nasa_epic_{number}.jpg"),
             params
         )
