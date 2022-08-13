@@ -3,6 +3,7 @@ import os
 import dotenv
 import requests
 from download_image_func import download_image
+from time import sleep
 
 
 def get_links(url):
@@ -29,6 +30,12 @@ def main():
     parser.add_argument('--launch_id', help="ID запуска", default="latest")
     launch_id = parser.parse_args()
     fetch_spacex_launch(launch_id.launch_id, images_path)
+    while True:
+        try:
+            fetch_spacex_launch(launch_id.launch_id, images_path)
+            break
+        except requests.exceptions.HTTPError or requests.exceptions.ConnectionError:
+            sleep(2)
 
 
 if __name__ == "__main__":
