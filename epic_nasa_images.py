@@ -1,10 +1,9 @@
-import time
-
 import requests
 import os
 from datetime import datetime
 from dotenv import load_dotenv
 from download_image_func import download_image
+from time import sleep
 
 
 def get_epic_nasa(api, path):
@@ -30,7 +29,12 @@ def main():
     nasa_token = os.environ["NASA_TOKEN"]
     images_path = os.getenv("IMAGES_PATH", default="images")
     os.makedirs(images_path, exist_ok=True)
-    get_epic_nasa(nasa_token, images_path)
+    while True:
+        try:
+            get_epic_nasa(nasa_token, images_path)
+            break
+        except requests.exceptions.HTTPError or requests.exceptions.ConnectionError:
+            sleep(2)
 
 
 if __name__ == "__main__":
