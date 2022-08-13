@@ -6,6 +6,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 from download_image_func import download_image
 
+
 def get_epic_nasa(api, path):
     url = f"https://api.nasa.gov/EPIC/api/natural"
     params = {
@@ -25,10 +26,10 @@ def get_epic_nasa(api, path):
 
 
 def main():
-    os.makedirs("images", exist_ok=True)
     load_dotenv()
     nasa_token = os.environ["NASA_TOKEN"]
     images_path = os.getenv("IMAGES_PATH", default="images")
+    os.makedirs(images_path, exist_ok=True)
     get_epic_nasa(nasa_token, images_path)
 
 
