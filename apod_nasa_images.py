@@ -3,6 +3,7 @@ import os
 import requests
 from dotenv import load_dotenv
 from download_image_func import download_image
+from time import sleep
 
 
 def get_apod_nasa(api, path, count):
@@ -35,7 +36,12 @@ def main():
     parser = argparse.ArgumentParser(description='Скачивает изображение дня NASA')
     parser.add_argument('--count', help="кол-во фотографий", default="30", type=int)
     images_count = parser.parse_args()
-    get_apod_nasa(nasa_token, images_path, images_count.count)
+    while True:
+        try:
+            get_apod_nasa(nasa_token, images_path, images_count.count)
+            break
+        except requests.exceptions.HTTPError or requests.exceptions.ConnectionError:
+            sleep(2)
 
 
 if __name__ == "__main__":
