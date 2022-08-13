@@ -1,13 +1,14 @@
-import requests
+import argparse
 import os
+import requests
 from dotenv import load_dotenv
 from download_image_func import download_image
 
 
-def get_apod_nasa(api, path):
+def get_apod_nasa(api, path, count):
     url = "https://api.nasa.gov/planetary/apod"
     params = {
-        "count": 40,
+        "count": count,
         "api_key": api
     }
     response = requests.get(url, params)
@@ -27,12 +28,14 @@ def get_apod_nasa(api, path):
 
 
 def main():
-    os.makedirs("images", exist_ok=True)
     load_dotenv()
     nasa_token = os.environ["NASA_TOKEN"]
     images_path = os.getenv("IMAGES_PATH", default="images")
-    get_apod_nasa(nasa_token, images_path)
-
+    os.makedirs(images_path, exist_ok=True)
+    parser = argparse.ArgumentParser(description='Скачивает изображение дня NASA')
+    parser.add_argument('--count', help="кол-во фотографий", default="30", type=int)
+    images_count = parser.parse_args()
+    get_apod_nasa(nasa_token, images_path, images_count.count)
 
 
 if __name__ == "__main__":
