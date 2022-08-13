@@ -1,6 +1,5 @@
 import argparse
 import random
-import sys
 import telegram
 import os
 from dotenv import load_dotenv
@@ -27,7 +26,6 @@ def main():
     telegram_token = os.environ["TELEGRAM_TOKEN"]
     telegram_chat_id = os.environ["TELEGRAM_CHAT_ID"]
     images_path = os.getenv("IMAGES_PATH", default="images")
-    os.makedirs("images", exist_ok=True)
     parser = argparse.ArgumentParser(description='Запускает бота')
     parser.add_argument(
         '--time',
