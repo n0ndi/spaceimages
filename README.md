@@ -15,7 +15,7 @@ Python3 должен быть уже установлен.
 pip install -r requirements.txt
 ```
 ### Возможности скриптов
-<p>apod_nasa_images.py - скачивает фотографии дня с сайта NASA<p>
+<p>apod_nasa_images.py - --count COUNT - скачивает фотографии дня с сайта NASA(COUNT по умолчанию 20 )<p>
 <p>epic_nasa_images.py - скачивает фотографии земли с сайта NASA<p>
 <p>fetch_spacex_launch.py --launch_id LAUNCH_ID - скачивает фотографии запуска с SpaceX(LAUNCH_ID по умолчанию последний запуск)<p>
 <p>tgbot.py --time TIME - запускает бота выкладывающий фото через определённое время(TIME по умолчанию 4 часа)<p>
@@ -23,6 +23,9 @@ pip install -r requirements.txt
 ### Пример запуска скриптов
 ```
 apod_nasa_images.py
+```
+```
+apod_nasa_images.py --count 10
 ```
 ```
 epic_nasa_images.py
