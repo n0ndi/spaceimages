@@ -18,7 +18,7 @@ def send_image(time, api, telegram_id, path):
                     sleep(time * 3600)
         except telegram.error.NetworkError:
             sleep(10)
-            send_image(time, api, telegram_id,  path)
+            print("Сбой интернет соединения.")
 
 
 def main():
