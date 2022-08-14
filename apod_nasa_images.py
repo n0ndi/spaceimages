@@ -36,12 +36,7 @@ def main():
     parser = argparse.ArgumentParser(description='Скачивает изображение дня NASA')
     parser.add_argument('--count', help="кол-во фотографий", default="30", type=int)
     images_count = parser.parse_args()
-    while True:
-        try:
-            get_apod_nasa(nasa_token, images_path, images_count.count)
-            break
-        except requests.exceptions.HTTPError or requests.exceptions.ConnectionError:
-            sleep(2)
+    get_apod_nasa(nasa_token, images_path, images_count.count)
 
 
 if __name__ == "__main__":
