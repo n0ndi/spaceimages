@@ -29,12 +29,7 @@ def main():
     nasa_token = os.environ["NASA_TOKEN"]
     images_path = os.getenv("IMAGES_PATH", default="images")
     os.makedirs(images_path, exist_ok=True)
-    while True:
-        try:
-            get_epic_nasa(nasa_token, images_path)
-            break
-        except requests.exceptions.HTTPError or requests.exceptions.ConnectionError:
-            sleep(2)
+    get_epic_nasa(nasa_token, images_path)
 
 
 if __name__ == "__main__":
